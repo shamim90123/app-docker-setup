@@ -1,0 +1,35 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "dev"]
+
+# docker-compose down
+# docker-compose up -d
+
+
+docker-compose.yml 
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: srdl-app
+    container_name: srdl-app
+    ports:
+      - "5173:5173"
+    command: ["npm", "run", "dev"]
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/app/src
+      - ./vite.config.js:/app/vite.config.js
+      - ./vue.config.js:/app/vue.config.js
